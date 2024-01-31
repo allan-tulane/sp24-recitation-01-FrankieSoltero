@@ -5,6 +5,7 @@ CMPS 2200  Recitation 1
 ### the only imports needed are here
 import tabulate
 import time
+import sys
 ###
 
 def linear_search(mylist, key):
@@ -20,7 +21,18 @@ def binary_search(mylist, key):
 	return _binary_search(mylist, key, 0, len(mylist)-1)
 
 def _binary_search(mylist, key, left, right):
-	"""
+  if right >= left:
+
+    middle = (left + right) // 2
+    if mylist[middle] == key:
+      return middle
+    elif mylist[middle] > key:
+      return _binary_search(mylist, key, left, middle - 1)
+    elif mylist[middle] < key:
+      return _binary_search(mylist, key, middle + 1, right)
+  else:
+    return -1
+  """
 	Recursive implementation of binary search.
 
 	Params:
@@ -40,7 +52,11 @@ def _binary_search(mylist, key, left, right):
 
 
 def time_search(search_fn, mylist, key):
-	"""
+  currentTime = float (time.time() * 1000)
+  search_fn(mylist, key)
+  stopTime = float (time.time() * 1000)
+  return stopTime - currentTime
+  """
 	Return the number of milliseconds to run this
 	search function on this list.
 
@@ -62,11 +78,24 @@ def time_search(search_fn, mylist, key):
 	###
 
 def compare_search(sizes=[1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]):
-	"""
+  finalList = []
+  for v,size in enumerate(sizes):
+    sizeList = list(range(size))
+
+
+    linearResult = time_search(linear_search, sizeList, -1)
+    binaryResult = time_search(binary_search,sizeList,-1)
+    tupleResult = (sizes[v],linearResult,binaryResult)
+
+    finalList.append(tupleResult)
+
+
+  return finalList
+  """
 	Compare the running time of linear_search and binary_search
 	for input sizes as given. The key for each search should be
 	-1. The list to search for each size contains the numbers from 0 to n-1,
-	sorted in ascending order. 
+	sorted in ascending order.
 
 	You'll use the time_search function to time each call.
 
@@ -86,4 +115,4 @@ def print_results(results):
 							headers=['n', 'linear', 'binary'],
 							floatfmt=".3f",
 							tablefmt="github"))
-
+print_results(compare_search([10,100,1000,10000,100000,1000000]))
