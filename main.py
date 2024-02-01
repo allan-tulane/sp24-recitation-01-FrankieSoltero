@@ -115,4 +115,4 @@ def print_results(results):
 							headers=['n', 'linear', 'binary'],
 							floatfmt=".3f",
 							tablefmt="github"))
-print_results(compare_search([10,100,1000,10000,100000,1000000]))
+print_results(compare_search([10,100,1000,10000,100000,1000000,10000000]))
